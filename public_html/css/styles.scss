@@ -155,7 +155,7 @@ textarea {
 }
 
 .thread__body {
-  .comment__item {
+  .comment__item.thread__item { //ganbatta_mainの本文を折り返すために thread__item追記。 211117反映されず。
     margin-bottom: 30px;
     &__head {
       font-size: 15px;
@@ -170,6 +170,7 @@ textarea {
     }
     &__content {
       font-size: 15px;
+      word-break: break-all; //ganbatta_mainの本文を折り返す。 211117反映されず。
     }
   }
 }

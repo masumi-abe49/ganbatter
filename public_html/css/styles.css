@@ -7,7 +7,8 @@ html {
 }
 
 * {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 a {
@@ -46,19 +47,27 @@ textarea {
 }
 
 .header {
-  background: rgba(161, 251, 239, 0.705);
+  background: rgba(245, 244, 244, 0.705);
 }
 
 .header__inner {
   width: 90%;
   margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .header__inner nav ul {
   margin-bottom: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   padding: 20px 0;
 }
@@ -67,9 +76,15 @@ textarea {
   font-size: 20px;
   font-family: 'M PLUS Rounded 1c', sans-serif;
   text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .header__inner nav ul li + li {
@@ -77,12 +92,18 @@ textarea {
 }
 
 .header__inner .header-r {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 
 .header__inner .prof-show {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .header__inner .prof-show .name {
@@ -90,17 +111,21 @@ textarea {
   color: #007bff;
 }
 
-.header__inner .prof-show .image img,
-.thread .thread__item .thread__body .comment__item .comment__item__head .imgarea img {
+.header__inner .prof-show .image img {
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .user-btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin-left: 20px;
 }
 
@@ -120,41 +145,11 @@ textarea {
   letter-spacing: 5px;
   text-align: center;
   margin-bottom: 50px;
-  font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro", "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "メイリオ", sans-serif;
+  font-family: 'Charm', cursive;
   font-style: italic;
   font-weight: 300;
   color: #323232;
 }
-
-/* mypageのform部分について */
-.form-main {
-  display: flex;
-}
-
-.form-left {
-  flex: auto;
-}
-
-.form-right {
-  flex: auto;
-}
-
-.form-left .imgarea {
-  margin-bottom: 1rem;
-}
-
-.form-right .btn-primary {
-  margin-top: 1rem;
-}
-
-.btn-gangatta-create { /* mypageの頑張った！作成画面へのボタン用 */
-  width: 20rem;
-  margin: 1rem auto;
-}
-
-/*  */
-
-
 
 .thread__item {
   background: #fcfcfc;
@@ -168,9 +163,15 @@ textarea {
 }
 
 .thread__head {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   margin-bottom: 40px;
 }
 
@@ -185,34 +186,30 @@ textarea {
   font-size: 15px;
 }
 
-.thread__body .comment__item {
+.thread__body .comment__item.thread__item {
   margin-bottom: 30px;
 }
 
-.thread__body .comment__item__head {
-  display: flex;
-  justify-content: space-between;
+.thread__body .comment__item.thread__item__head {
   font-size: 15px;
   margin-bottom: 10px;
 }
 
-.thread__body .comment__item__name {
+.thread__body .comment__item.thread__item__name {
+  color: #3c70e0;
   font-family: 'M PLUS Rounded 1c', sans-serif;
-  margin: 0 10px;
+  margin-right: 10px;
   font-size: 15px;
   font-weight: bold;
 }
 
-.thread__body .comment__item__date {
-  margin-right: 1rem;
-}
-
-.thread__body .comment__item__content {
+.thread__body .comment__item.thread__item__content {
   font-size: 15px;
+  word-break: break-all;
 }
 
 .thread__item .form-group {
-  width: auto;
+  width: 500px;
   margin: 0 auto 0 0;
   font-size: 15px;
 }
@@ -223,8 +220,15 @@ textarea {
 }
 
 .thread__item .operation {
-  align-items: center;
-  text-align: right;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .thread__item .operation a {
@@ -297,8 +301,12 @@ textarea {
 }
 
 .user-confirm {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .user-confirm a {
@@ -315,7 +323,8 @@ textarea {
   border-radius: 50%;
   width: 150px;
   height: 150px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .imgarea:empty {
@@ -335,16 +344,16 @@ textarea {
 
 .fav__btn {
   font-size: 20px;
-  color: gray;
 }
 
 .fav__btn.active {
-  color: #ff5fa8;
+  color: #e8e826;
 }
 
 .form-search {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  margin-top: 1rem;
 }
 
 .form-search input[type=submit] {
@@ -355,3 +364,4 @@ textarea {
   padding: 0;
   font-weight: bold;
 }
+/*# sourceMappingURL=styles.css.map */

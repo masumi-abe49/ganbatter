@@ -2,8 +2,7 @@
 namespace ganbatter\Model;
 class User extends \ganbatter\Model {
   public function create($values) { //ユーザー新規登録のためのメソッド
-    $stmt = $this->db->prepare("INSERT INTO users (username,email,password,created,modified) VALUES (:username,:email,:password,now(),now())");
-    // $stmtという変数にSQL文を代入。prepareメソッドを利用してユーザーからの入力をSQLに含めることができる（変数を埋め込みできる）※queryメソッドは変数の埋め込みができない。
+    $stmt = $this->db->prepare("INSERT INTO users (username,email,password,created,modified) VALUES (:username,:email,:password,now(),now())");  // $stmtという変数にSQL文を代入。prepareメソッドを利用してユーザーからの入力をSQLに含めることができる（変数を埋め込みできる）※queryメソッドは変数の埋め込みができない。 また、php.iniのdate.timezoneが設定なし（UTC）のため、nou関数を使うとJST（日本時間）から-9:00で登録されてしまう。PHPの設定を変更する必要あるかも。
     $res = $stmt->execute([
       ':username' => $values['username'],
       ':email' => $values['email'],
