@@ -13,7 +13,7 @@ $threadDisp = $threadMod->getThread($thread_id);
       <!-- <h2 class="thread__ttl">
         h($thread->ganbatta_main);
       </h2> 頑張った！一覧のスレッドにタイトルは不要。本文のみでOK -->
-      <span class="thread__item__name">名前：<?= h($threadDisp->username); var_dump($threadDisp);?></span>
+      <span class="thread__item__name">名前：<?= h($threadDisp->username); ?></span>
       <span class="thread__item__date">頑張った！投稿日時：<?= h($threadDisp->created); ?></span>
       <!-- <div><i class="fas fa-star"></i></div> --> <!-- いいぞ！の部分 -->
     </div>

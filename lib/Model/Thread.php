@@ -37,9 +37,9 @@ class Thread extends \ganbatter\Model {
     return $res['record_num'];
   }
 
-  //  スレッド1件取得 頑張った！作成ユーザー名も取得する必要あり。
+  //  スレッド1件取得 頑張った！作成ユーザー名も取得する必要あり。→prepare文の中でカラム指定するときは正確に指定する。（同じカラム名がある場合は必ず＜テーブル名.カラム名,＞を入力する。） 220130
   public function getThread($thread_id) {
-    $stmt = $this->db->prepare("SELECT * FROM threads WHERE id = :id AND delflag = 0 ");
+    $stmt = $this->db->prepare("SELECT threads.id,user_id,ganbatta_main,threads.delflag,threads.created,username FROM threads INNER JOIN users ON user_id = users.id WHERE threads.id = :id AND threads.delflag = 0 ");
     $stmt->bindValue(":id",$thread_id);
     $stmt->execute();
     return $stmt->fetch(\PDO::FETCH_OBJ);
