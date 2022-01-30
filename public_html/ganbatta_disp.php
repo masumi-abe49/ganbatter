@@ -37,7 +37,7 @@ $threadDisp = $threadMod->getThread($thread_id);
     <form action="" method="post" class="form-group new_thread" id="new_thread">
       <div class="form-group">
         <label>コメント</label>
-        <textarea type="text" name="comment" class="form-control" <?= isset($threadCon->getValues()->content) ? h($threadCon->getValues()->content) : ''; ?> placeholder="応援のコメントをどうぞ！！"></textarea>
+        <textarea type="text" name="content" class="form-control" <?= isset($threadCon->getValues()->content) ? h($threadCon->getValues()->content) : ''; ?> placeholder="応援のコメントをどうぞ！！"></textarea>
         <p class="err"><?= h($threadCon->getErrors('comment')); ?></p>
       </div>
       <div class="form-group">

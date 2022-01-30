@@ -54,6 +54,7 @@ class Thread extends \ganbatter\Controller {
       }
       header('Location: '. SITE_URL . '/ganbatta_disp.php?thread_id=' . $_POST['thread_id']);
       exit();
+      // 応援コメント書き込み後は、その頑張った！詳細の画面に遷移（コメントが追加された状態）する。220130
   }
 
 
@@ -63,20 +64,23 @@ class Thread extends \ganbatter\Controller {
         echo "不正なトークンです！";
       exit();
       }
-      if (!isset($_POST['thread'])) {
-        echo '不正な投稿です';
+      if (!isset($_POST['thread']) && !isset($_POST['content'])) {
+        echo "不正な投稿です";
       exit();
+      // if文の内容について、頑張った！！詳細からコメント書き込みする際に&&にしないと不正な投稿ですが表示されてしまう。スレッド分とコメント分でvalidetionを分けた方がいいかも。
       }
-      if ($_POST['thread'] === '') {
+      if (isset($_POST['thread']) && $_POST['thread'] === '') {
         throw new \ganbatter\Exception\EmptyPost("あなたの頑張った！が入力されていませんよ…！");
+        // if文の内容について、頑張った！！詳細からコメント書き込みする際に&&にしないと不正な投稿ですが表示されてしまう。スレッド分とコメント分でvalidetionを分けた方がいいかも。
       }
-      if (mb_strlen($_POST['thread']) > 141) {
+      if (isset($_POST['thread']) && mb_strlen($_POST['thread']) > 140) {
         throw new \ganbatter\Exception\CharLength("ちょっと頑張った！内容が長過ぎるようです…！");
+        // if文の内容について、頑張った！！詳細からコメント書き込みする際に&&にしないと不正な投稿ですが表示されてしまう。スレッド分とコメント分でvalidetionを分けた方がいいかも。
       }
-      if ($_POST['comment'] === '') {
+      if ($_POST['content'] === '') {
         throw new \ganbatter\Exception\EmptyPost("応援のコメントが入力されていませんよ…！");
       }
-      if (mb_strlen($_POST['comment']) > 141) {
+      if (mb_strlen($_POST['content']) > 140) {
         throw new \ganbatter\Exception\CharLength("ちょっと応援コメントが長過ぎるようです…！");
       }
     }
