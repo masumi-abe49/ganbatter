@@ -35,6 +35,10 @@ class UserUpdate extends \ganbatter\Controller {
       $old_img = $_POST['old_image'];
       $ext = substr($user_img['name'], strrpos($user_img['name'], '.') + 1);
       $user_img['name'] = uniqid("img_") .'.'. $ext;
+      if($old_img == '') {
+        $old_img = NULL;
+        // phpMyAdmin（データベース）のuserテーブルのimageカラム（今回は$old_imgを定義している）が「更新ボタン」を押したときに空欄（空データ）だった場合はNULLを代入する。これによりimageカラムが空欄＝画像削除をした際にNULLが登録され、ビュー（mypage.php）に記載しているようにnoimage.pngが表示されるようになる。220201
+      }
       try {
         $userModel = new \ganbatter\Model\User();
         if($user_img['size'] > 0) {
@@ -52,6 +56,8 @@ class UserUpdate extends \ganbatter\Controller {
             'email' => $_POST['email'],
             'userimg' => $old_img
           ]);
+          $_SESSION['me']->image = $old_img;
+          // 本メソッド内で画像がアップロードされていなかった場合、$_SESSION['me']のimageの値に$old_img（すなわちNULL）を代入してヘッダー部分の画像にも同じ画像を反映させている。220201
         }
       }
       catch (\ganbatter\Exception\DuplicateEmail $e) {
