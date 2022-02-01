@@ -25,21 +25,33 @@ require_once(__DIR__ .'/../config/config.php');
     <ul>
       <li><a href="<?= SITE_URL; ?>/">ホーム</a></li>
       <?php
-      if(isset($_SESSION['me'])) { ?>
+      if(isset($_SESSION['me'])): ?>
       <li><a href="<?= SITE_URL; ?>/ganbatta_create.php">作成</a></li>
       <li><a href="<?= SITE_URL; ?>/ganbatta_all.php">頑張った！一覧</a></li>
       <li><a href="<?= SITE_URL; ?>/ganbatta_likes.php">いいぞ！一覧</a></li>
-      <?php } else { ?>
+      <?php // if ($_SESSION['me']->authority === '99'): ?>
+      <!-- <li><a href="<?= SITE_URL; ?>/user_manage.php">管理者ページ</a></li> -->
+      <?php // endif; ?>
+      <?php else: ?>
         <li class="user-btn"><a href="<?= SITE_URL; ?>/login.php">ログイン</a></li>
         <li><a href="<?= SITE_URL; ?>/signup.php">ユーザー登録</a></li>
-      <?php } ?>
+      <?php endif; ?>
     </ul>
   </nav>
   <div class="header-r">
     <?php
       if(isset($_SESSION['me'])) { ?>
-      <div class="prof-show">
-        <a href="<?= SITE_URL; ?>/mypage.php"><span class="name"><?= h($_SESSION['me']->username); ?></span></a>
+      <div class="prof-show" data-me="<?= h($_SESSION['me']->id); ?>">
+        <a href="<?= SITE_URL; ?>/mypage.php">
+          <span class="name"><?= h($_SESSION['me']->username); ?></span>
+          <span class="image">
+            <?php if(isset($_SESSION['me']->image)): ?>
+              <img src="<?= SITE_URL; ?>/gazou/<?= h($_SESSION['me']->image); ?>" alt="">
+            <?php else: ?>
+              <img src="<?= SITE_URL; ?>/asset/img/noimage.png" alt="">
+            <?php endif; ?>
+          </span>
+        </a>
       </div>
       <form action="logout.php" method="post" id="logout" class="user-btn">
         <input type="submit" value="ログアウト">
