@@ -14,10 +14,14 @@ class Thread extends \ganbatter\Model {
     }
   }
 
-  // 全頑張った！を取得するメソッド
+  // 全頑張った！を取得するメソッド INNER JOIN usersと LEFT JOIN likesを同時にやらないとダメかも。
   public function getThreadAll() {
-    $stmt = $this->db->query("SELECT threads.id,user_id,users.username,ganbatta_main,threads.created FROM threads INNER JOIN users ON user_id = users.id WHERE threads.delflag = 0 ORDER BY id desc");
-    // threadsテーブルとusersテーブルを内部結合（INNER JOIN）し、ON句を使ってthreadsテーブルのuser_idとusersテーブルのidを結合条件としてSELECT句の中のusers.usernameでthreadsテーブルのidに紐づくuser_idのユーザー名を取得。ON句での条件指定は、結合条件を指定する意味合いがある。また、WHERE句での条件指定は、対象データの抽出を行うために使う。結合前のデータで条件による絞り込みを行うのが「ON句」、結合後のデータで条件による絞り込みを行うのが「WHERE句」に記述した場合となる。
+    $user_id = $_SESSION['me']->id;
+    $stmt = $this->db->query("SELECT t.id AS t_id,ganbatta_main,t.created,l.id AS l_id FROM threads AS t LEFT JOIN likes AS l ON t.delflag = 0 AND t.id = l.thread_id AND l.user_id = $user_id ORDER BY t.id desc");
+    
+    // $stmt = $this->db->query("SELECT threads.id,user_id,users.username,ganbatta_main,threads.created FROM threads INNER JOIN users ON user_id = users.id WHERE threads.delflag = 0 ORDER BY id desc");
+
+    // threadsテーブルとusersテーブルを内部結合（INNER JOIN）し、ON句を使ってthreadsテーブルのuser_idとusersテーブルのidを結合条件としてSELECT句の中のusers.usernameでthreadsテーブルのidに紐づくuser_idのユーザー名を取得。ON句での条件指定は、結合条件を指定する意味合いがある。また、WHERE句での条件指定は、対象データの抽出を行うために使う。結合前のデータで条件による絞り込みを行うのが「ON句」、結合後のデータで条件による絞り込みを行うのが「WHERE句」に記述した場合となる。 AS句とは、カラムやテーブルに別名をつけられる句。別名をつけたいカラムの後ろに「AS」と別名を記述すればOK。threadsを「t」に、likesを「l」と別名をつけています。別名をつけないと「threads.id」「like.id」など、クエリが冗長になってしまうでしょう。このように、テーブル名を短く設定したい場合などにテーブルの別名設定は有効
     return $stmt->fetchAll(\PDO::FETCH_OBJ);
   }
 
@@ -77,6 +81,47 @@ class Thread extends \ganbatter\Model {
       echo $e->getMessage();
       // エラーがあれば元に戻す
       $this->db->rollBack();
+    }
+  }
+
+  // いいぞ！機能(お気に入りみたいなもの) favの部分をlikeに変更する方がわかりやすいかも
+  public function changeLike($values) {
+    try {
+      $this->db->beginTransaction();
+      // レコード取得
+      $stmt = $this->db->prepare("SELECT * FROM likes WHERE thread_id = :thread_id AND user_id = :user_id");
+      $stmt->execute([
+        ':thread_id' => $values['thread_id'],
+        ':user_id' => $values['user_id']
+      ]);
+      // fetchMode データを扱いやすい形に変換
+      $stmt->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
+      $rec = $stmt->fetch();
+      $fav_flag = 0;
+      if (empty($rec)) {
+        $sql = "INSERT INTO likes (thread_id,user_id,created) VALUES (:thread_id,:user_id,now())";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+          ':thread_id' => $values['thread_id'],
+          ':user_id' => $values['user_id']
+        ]);
+        $fav_flag = 1;
+      } else {
+        $sql = "DELETE FROM likes WHERE thread_id = :thread_id AND user_id = :user_id";
+        $stmt = $this->db->prepare($sql);
+        $res = $stmt->execute([
+          ':thread_id' => $values['thread_id'],
+          ':user_id' => $values['user_id']
+        ]);
+        $fav_flag = 0;
+      }
+      $this->db->commit();
+      return $fav_flag;
+      // $fav_flagが1であれば、いいぞ！あり、ということになり、returnで結果を返している。ganbatter.jsのsuccess: function (data) { if (data == 1) { で使用している。
+    } catch (\Exception $e) {
+      echo $e->getMessage();
+      // エラーがあったら元に戻す
+      $this->db->rollback();
     }
   }
 
