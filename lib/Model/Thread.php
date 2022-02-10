@@ -17,9 +17,11 @@ class Thread extends \ganbatter\Model {
   // 全頑張った！を取得するメソッド INNER JOIN usersと LEFT JOIN likesを同時にやらないとダメかも。
   public function getThreadAll() {
     $user_id = $_SESSION['me']->id;
-    $stmt = $this->db->query("SELECT t.id AS t_id,ganbatta_main,t.created,l.id AS l_id FROM threads AS t LEFT JOIN likes AS l ON t.delflag = 0 AND t.id = l.thread_id AND l.user_id = $user_id ORDER BY t.id desc");
-    
-    // $stmt = $this->db->query("SELECT threads.id,user_id,users.username,ganbatta_main,threads.created FROM threads INNER JOIN users ON user_id = users.id WHERE threads.delflag = 0 ORDER BY id desc");
+    // $stmt = $this->db->query("SELECT t.id AS t_id,ganbatta_main,t.created,l.id AS l_id FROM threads AS t LEFT JOIN likes AS l ON t.delflag = 0 AND t.id = l.thread_id AND l.user_id = $user_id ORDER BY t.id desc");
+
+    $stmt = $this->db->query("SELECT t.id AS t_id,t.user_id,users.username,ganbatta_main,t.created,l.id AS l_id FROM threads AS t INNER JOIN users ON t.user_id = users.id LEFT JOIN likes AS l ON t.delflag = 0 AND t.id = l.thread_id AND l.user_id = $user_id ORDER BY t.id desc");
+
+    // $stmt = $this->db->query("SELECT threads.id,threads.user_id,users.username,ganbatta_main,threads.created FROM threads INNER JOIN users ON threads.user_id = users.id LEFT JOIN likes ON threads.delflag = 0 AND threads.id = likes.thread_id AND likes.user_id = $user_id ORDER BY id desc");
 
     // threadsテーブルとusersテーブルを内部結合（INNER JOIN）し、ON句を使ってthreadsテーブルのuser_idとusersテーブルのidを結合条件としてSELECT句の中のusers.usernameでthreadsテーブルのidに紐づくuser_idのユーザー名を取得。ON句での条件指定は、結合条件を指定する意味合いがある。また、WHERE句での条件指定は、対象データの抽出を行うために使う。結合前のデータで条件による絞り込みを行うのが「ON句」、結合後のデータで条件による絞り込みを行うのが「WHERE句」に記述した場合となる。 AS句とは、カラムやテーブルに別名をつけられる句。別名をつけたいカラムの後ろに「AS」と別名を記述すればOK。threadsを「t」に、likesを「l」と別名をつけています。別名をつけないと「threads.id」「like.id」など、クエリが冗長になってしまうでしょう。このように、テーブル名を短く設定したい場合などにテーブルの別名設定は有効
     return $stmt->fetchAll(\PDO::FETCH_OBJ);
@@ -123,6 +125,13 @@ class Thread extends \ganbatter\Model {
       // エラーがあったら元に戻す
       $this->db->rollback();
     }
+  }
+
+  //いいぞ！したスレッドの取得
+  public function getThreadLikeALL() {
+    $user_id = $_SESSION['me']->id;
+    $stmt = $this->db->query("SELECT t.id AS t_id,t.user_id,users.username,ganbatta_main,t.created,l.id AS l_id FROM threads AS t INNER JOIN users ON t.user_id = users.id INNER JOIN likes AS l ON t.delflag = 0 AND t.id = l.thread_id AND l.user_id = $user_id ORDER BY t.id desc");
+    return $stmt->fetchAll(\PDO::FETCH_OBJ);
   }
 
 }

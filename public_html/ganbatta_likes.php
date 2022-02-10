@@ -1,10 +1,10 @@
 <?php
 require_once(__DIR__ .'/header.php');
 $threadMod = new ganbatter\Model\Thread();
-$threads = $threadMod->getThreadAll();
+$threads = $threadMod->getThreadLikeAll();
 // echo date('Y-m-d H:i:s');
 ?>
-<h1 class="page__ttl">頑張った！一覧</h1>
+<h1 class="page__ttl">いいぞ！一覧</h1>
 <ul class="thread">
   <?php foreach($threads as $thread): ?>
     <li class="thread__item" data-threadid="<?= $thread->t_id; ?>">
@@ -14,7 +14,7 @@ $threads = $threadMod->getThreadAll();
         </h2> 頑張った！一覧のスレッドにタイトルは不要。本文のみでOK -->
         <span class="thread__item__name">名前：<?= h($thread->username); ?></span>
         <span class="thread__item__date">頑張った！投稿日時：<?= h($thread->created); ?></span>
-        <div class="fav__btn<?php if(isset($thread->l_id)) { echo ' active';} ?>"><i class="fas fa-star"></i></div> <!-- いいぞ！の部分 if文の中にあるactiveについては、classのfav__btnの後ろに記載されるためしっかりと＜ ＞（半角スペース）を入れてあげないといいぞ！のbtnを押したときにうまく反応されない。 -->
+        <div class="fav__btn<?php if(isset($thread->l_id)) { echo ' active';} ?>"><i class="fas fa-star"></i></div> <!-- いいぞ！の部分 -->
       </div>
       <ul class="thread__body">
         <li class="thread__item__content">

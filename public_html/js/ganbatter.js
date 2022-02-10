@@ -27,7 +27,8 @@ $(function () {
     var $myid = $('.prof-show').data('me');
     $.ajax({
       type: 'post',
-      url: origin + '/public_html/ajax.php',
+      url: origin + '/ganbatter/public_html/ajax.php',
+      //jsの確認は、ブラウザのデベロッパーツールでコンソールを確認する。404エラーはURLが見つからない（URL指定がミスってる）エラー。しっかりとURL指定を確認する。また、jsファイルを修正したあとブラウザを更新しても反映されていない場合はスーパーリロード（Mac/Command+Shift+R）してキャッシュ削除して更新。キャッシュが残っていると古いjsデータが読み込まれたままになることも多いとのこと。
       data: {
         'thread_id': $threadid,
         'user_id': $myid,
