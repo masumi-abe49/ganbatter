@@ -8,8 +8,13 @@ class Thread extends \ganbatter\Controller {
       } elseif($_POST['type'] === 'createcomment') {
         $this->createComment();
       }
+    } elseif($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['type'])) {
+    $threadData = $this->searchThread();
+    return $threadData;
     }
   }
+
+  // 頑張った！作成メソッド
   private function createThread() {
     try {
       $this->validate();
@@ -57,6 +62,26 @@ class Thread extends \ganbatter\Controller {
       // 応援コメント書き込み後は、その頑張った！詳細の画面に遷移（コメントが追加された状態）する。220130
   }
 
+  // 頑張った！検索メソッド
+  public function searchThread(){
+    try {
+      $this->validateSearch();
+    } catch (\ganbatter\Exception\EmptyPost $e) {
+      $this->setErrors('keyword', $e->getMessage());
+    } catch (\ganbatter\Exception\CharLength $e) {
+      $this->setErrors('keyword', $e->getMessage());
+    }
+
+    $keyword = $_GET['keyword'];
+    $this->setValues('keyword', $keyword);
+    if ($this->hasError()) {
+      return;
+    } else {
+      $threadModel = new \ganbatter\Model\Thread();
+      $threadData = $threadModel->searchThread($keyword);
+      return $threadData;
+    }
+  }
 
   private function validate() {
     if ($_POST['type'] === 'createthread' || $_POST['type'] === 'createcomment') {
@@ -82,6 +107,18 @@ class Thread extends \ganbatter\Controller {
       }
       if (mb_strlen($_POST['content']) > 140) {
         throw new \ganbatter\Exception\CharLength("ちょっと応援コメントが長過ぎるようです…！");
+      }
+    }
+  }
+
+  // 頑張った！検索用のバリデーション
+  private function validateSearch() {
+    if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['type'])) {
+      if ($_GET['keyword'] === '') {
+        throw new \ganbatter\Exception\EmptyPost("検索キーワードが入力されていません…！");
+      }
+      if (mb_strlen($_GET['keyword']) > 20) {
+        throw new \ganbatter\Exception\CharLength("キーワードが長すぎます…！");
       }
     }
   }

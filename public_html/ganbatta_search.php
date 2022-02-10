@@ -1,22 +1,27 @@
 <?php
 require_once(__DIR__ .'/header.php');
+$threadCon = new ganbatter\Controller\Thread();
 $threadMod = new ganbatter\Model\Thread();
-$threads = $threadMod->getThreadAll();
-// echo date('Y-m-d H:i:s');
+$threads = $threadCon->run();
 ?>
-<h1 class="page__ttl">頑張った！一覧</h1>
-<!-- ↓いいぞ！（thread）検索　☆method属性はget☆ -->
-<form action="ganbatta_search.php" method="get" class="form-group form-search">
+<h1 class="page__ttl">頑張った！検索</h1>
+<form action="" method="get" class="form-group form-search">
   <div class="form-group">
-    <input type="text" name="keyword" placeholder="頑張った！を検索">
+    <input type="text" name="keyword" value="<?= isset($threadCon->getValues()->keyword) ? h($threadCon->getValues()->keyword): ''; ?>" placeholder="頑張った！検索">
+    <p class="err"><?= h($threadCon->getErrors('keyword')); ?></p>
   </div>
   <div class="form-group">
     <input type="submit" value="検索" class="btn btn-primary">
     <input type="hidden" name="type" value="searchthread">
   </div>
 </form>
-<!-- ↑いいぞ！（thread）検索 -->
+<?php $threads != '' ? $con = count($threads) : ''; ?>
+<?php if (($threadCon->getErrors('keyword'))): ?>
+<?php else : ?>
+<div>キーワード：<?= $_GET['keyword']; ?>　　該当件数：<?= $con; ?>件</div>
+<?php endif; ?>
 <ul class="thread">
+<?php if ($con > 0): ?>
   <?php foreach($threads as $thread): ?>
     <li class="thread__item" data-threadid="<?= $thread->t_id; ?>">
       <div class="thread__head">
@@ -44,12 +49,16 @@ $threads = $threadMod->getThreadAll();
           <p class="comment__item__content"><?= h($comment->content); ?></p>
         <?php endforeach; ?>
         </li>
-      </ul>
+      </ul><!-- thread__body -->
       <div class="operation">
         <a href="<?= SITE_URL; ?>/ganbatta_disp.php?thread_id=<?= $thread->t_id; ?>">コメント書き込み＆すべて読む(<?= h($threadMod->getCommentCount($thread->t_id)); ?>)</a>
+        <p class="thread_date">頑張った！作成日時：<?= h($thread->created); ?></p>
       </div>
     </li>
   <?php endforeach; ?>
+<?php else: ?>
+  <p>キーワードに該当する頑張った！が見つかりませんでした…！</p>
+<?php endif; ?>
 </ul><!-- thread -->
 <?php
 require_once(__DIR__ .'/footer.php');

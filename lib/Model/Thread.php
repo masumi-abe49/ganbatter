@@ -134,4 +134,13 @@ class Thread extends \ganbatter\Model {
     return $stmt->fetchAll(\PDO::FETCH_OBJ);
   }
 
+  // 頑張った！検索
+  public function searchThread($keyword) {
+    $user_id = $_SESSION['me']->id;
+    // $stmt = $this->db->prepare("SELECT * FROM threads WHERE ganbatta_main LIKE :ganbatta_main AND delflag = 0;");
+    $stmt = $this->db->prepare("SELECT t.id AS t_id,t.user_id,users.username,ganbatta_main,t.created,l.id AS l_id FROM threads AS t INNER JOIN users ON t.user_id = users.id LEFT JOIN likes AS l ON t.delflag = 0 AND t.id = l.thread_id AND l.user_id = $user_id WHERE ganbatta_main LIKE :ganbatta_main");
+    $stmt->execute([':ganbatta_main' => '%'.$keyword.'%']);
+    return $stmt->fetchAll(\PDO::FETCH_OBJ);
+  }
+
 }
