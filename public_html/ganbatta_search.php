@@ -15,7 +15,7 @@ $threads = $threadCon->run();
     <input type="hidden" name="type" value="searchthread">
   </div>
 </form>
-<?php $threads != '' ? $con = count($threads) : ''; ?>
+<?php $threads != '' ? $con = count($threads) : $con = ''; // 三項演算子（if..else文と異なり、演算子のため式を返す） 条件式 ? 式1 : 式2  →条件式を評価し、TRUEであれば式1、FALSEであれば式2を返す。FALSEだった場合の$conに対しての代入を記載しないと24行目のif($con > 0)の部分でNotice:Undefined variable:con in... エラーが発生する。 ?>
 <?php if (($threadCon->getErrors('keyword'))): ?>
 <?php else : ?>
 <div>キーワード：<?= $_GET['keyword']; ?>　　該当件数：<?= $con; ?>件</div>
@@ -56,7 +56,7 @@ $threads = $threadCon->run();
       </div>
     </li>
   <?php endforeach; ?>
-<?php else: ?>
+<?php elseif($threads != ''): //elseだけにすると、検索ワード未入力時と検索ワードが長すぎたときに↓の文章が表示されてしまう。そうすると未入力時もワードが長すぎた時も検索をしていて、その結果スレッドが見つからなかったように感じるためelseifで条件を指定して表示さないようにしている。 ?>
   <p>キーワードに該当する頑張った！が見つかりませんでした…！</p>
 <?php endif; ?>
 </ul><!-- thread -->
